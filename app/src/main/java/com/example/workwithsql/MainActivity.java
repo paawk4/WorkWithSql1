@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+
     public void GetTextFromSql(View v){
         TextView ID = findViewById(R.id.txtID);
         TextView Name = findViewById(R.id.txtName);
