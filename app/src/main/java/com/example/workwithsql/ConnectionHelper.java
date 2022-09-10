@@ -21,7 +21,7 @@ public class ConnectionHelper {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         Connection connection = null;
-        String connectionURL = null;
+        String connectionURL;
 
         try{
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
