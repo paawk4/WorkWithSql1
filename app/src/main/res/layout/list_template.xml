@@ -11,18 +11,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/id"/>
+            android:id="@+id/Id"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/name"
-            android:layout_toRightOf="@+id/id"/>
+            android:id="@+id/Name"
+            android:layout_toEndOf="@+id/Id"/>
+
         <TextView
+            android:id="@+id/Age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/age"
-            android:layout_below="@+id/name"
-            android:layout_toRightOf="@+id/id"/>
+            android:layout_below="@+id/Name"
+            android:layout_toEndOf="@+id/Id" />
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
