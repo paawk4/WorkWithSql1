@@ -15,7 +15,6 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
-/*https://www.youtube.com/watch?v=pe0GmXHAda4*/
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -33,9 +32,15 @@ public class MainActivity extends AppCompatActivity {
         ListItem myData = new ListItem();
         myDataList = myData.getList();
 
-        String[] fromView = {"ID", "Name", "Age"};
-        int[] toView = {R.id.Id, R.id.Name, R.id.Age};
+        String[] fromView = {"Name", "Job", "Email"};
+        int[] toView = {R.id.Name, R.id.Job, R.id.Email};
         simpleAdapter = new SimpleAdapter(MainActivity.this, myDataList,R.layout.list_template,fromView, toView);
         listView.setAdapter(simpleAdapter);
+    }
+    public void CreatePerson(View v)
+    {
+        ListView listView = (ListView) findViewById(R.id.lvDatabase);
+
+
     }
 }

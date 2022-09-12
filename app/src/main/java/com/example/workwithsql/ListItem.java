@@ -31,9 +31,41 @@ public class ListItem {
 
                 while (resultSet.next()){
                     Map<String,String> dtName = new HashMap<String, String>();
-                    dtName.put("ID",resultSet.getString("id"));
                     dtName.put("Name",resultSet.getString("name"));
-                    dtName.put("Age",resultSet.getString("age"));
+                    dtName.put("Job",resultSet.getString("job"));
+                    dtName.put("Email",resultSet.getString("email"));
+
+                    data.add(dtName);
+                }
+                ConnectionResult = "Есть контакт";
+                isSuccess = true;
+                connection.close();
+            }
+            else {
+                ConnectionResult = "Не получилось";
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return data;
+    }
+    public List<Map <String, String>> createPerson(){
+        List<Map <String, String>> data = null;
+        data = new ArrayList<Map <String, String>>();
+        try
+        {
+            ConnectionHelper connectionHelper = new ConnectionHelper();
+            connection = connectionHelper.connectionClass();
+            if (connection != null){
+                String query = "INSERT INTO Personal_Inf (name, job, email) values('TEXT', 'INTEGER', '')";
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query);
+
+                while (resultSet.next()){
+                    Map<String,String> dtName = new HashMap<String, String>();
+                    dtName.put("Name",resultSet.getString("name"));
+                    dtName.put("Job",resultSet.getString("job"));
+                    dtName.put("Email",resultSet.getString("email"));
 
                     data.add(dtName);
                 }
