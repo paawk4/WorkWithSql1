@@ -2,7 +2,9 @@ package com.example.workwithsql;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -11,7 +13,10 @@ import android.widget.TextView;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +42,59 @@ public class MainActivity extends AppCompatActivity {
         simpleAdapter = new SimpleAdapter(MainActivity.this, myDataList,R.layout.list_template,fromView, toView);
         listView.setAdapter(simpleAdapter);
     }
-    public void CreatePerson(View v)
+    public void ViewCreatePerson(View v)
     {
-        ListView listView = (ListView) findViewById(R.id.lvDatabase);
+        setContentView(R.layout.create_person);
+    }
+
+    Connection connection;
+    String ConnectionResult = "";
+    Boolean isSuccess = false;
+
+    @SuppressLint("ResourceType")
+    public void ViewList(View v){
+        String name, job, email;
+
+        name = (String) getText(R.id.txtName);
+        job = (String) getText(R.id.txtJob);
+        email = (String) getText(R.id.txtEmail);
+
+        if(name != null && job != null && email != null){
+
+            List<Map <String, String>> data = null;
+            data = new ArrayList<Map <String, String>>();
+            try
+            {
+                ConnectionHelper connectionHelper = new ConnectionHelper();
+                connection = connectionHelper.connectionClass();
+                if (connection != null){
+                    String query = "INSERT INTO Personal_Inf (name, job, email) VALUES (" + name + ", " + job + ", " + email + ")";
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(query);
+
+
+                    ConnectionResult = "Есть контакт";
+                    isSuccess = true;
+                    connection.close();
+                }
+                else {
+                    ConnectionResult = "Не получилось";
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            setContentView(R.layout.activity_main);
+        }
+        else{
+
+        }
+
+
+
+
+
+
+
 
 
     }

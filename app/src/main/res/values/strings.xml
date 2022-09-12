@@ -3,4 +3,8 @@
     <string name="view">View</string>
     <string name="enter">enter</string>
     <string name="find">Find</string>
+    <string name="name">Name:</string>
+    <string name="create" />
+    <string name="job" />
+    <string name="email" />
 </resources>
