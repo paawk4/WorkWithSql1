@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -46,18 +47,23 @@ public class MainActivity extends AppCompatActivity {
     {
         setContentView(R.layout.create_person);
     }
+    public void GoBack(View v) { setContentView(R.layout.activity_main);}
 
     Connection connection;
     String ConnectionResult = "";
     Boolean isSuccess = false;
 
-    @SuppressLint("ResourceType")
+    @SuppressLint("NewApi")
     public void ViewList(View v){
-        String name, job, email;
+        String name = "", job = "", email = "";
 
-        name = (String) getText(R.id.txtName);
-        job = (String) getText(R.id.txtJob);
-        email = (String) getText(R.id.txtEmail);
+        EditText edName = findViewById(R.id.edName);
+        EditText edJob = findViewById(R.id.edJob);
+        EditText edEmail = findViewById(R.id.edEmail);
+
+        name = edName.getText().toString();
+        job = edJob.getText().toString();
+        email = edEmail.getText().toString();
 
         if(name != null && job != null && email != null){
 
@@ -68,10 +74,9 @@ public class MainActivity extends AppCompatActivity {
                 ConnectionHelper connectionHelper = new ConnectionHelper();
                 connection = connectionHelper.connectionClass();
                 if (connection != null){
-                    String query = "INSERT INTO Personal_Inf (name, job, email) VALUES (" + name + ", " + job + ", " + email + ")";
+                    String query = " INSERT INTO Personal_Inf (name, job, email) VALUES ('" + name + "', '" + job + "', '" + email + "')";
                     Statement statement = connection.createStatement();
                     ResultSet resultSet = statement.executeQuery(query);
-
 
                     ConnectionResult = "Есть контакт";
                     isSuccess = true;
@@ -88,14 +93,5 @@ public class MainActivity extends AppCompatActivity {
         else{
 
         }
-
-
-
-
-
-
-
-
-
     }
 }
