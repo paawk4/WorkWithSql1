@@ -26,7 +26,6 @@
         android:id="@+id/btnView"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
         android:contentDescription="@string/view"
         android:onClick="GetList"
         app:icon="@drawable/ic_refresh_fill0_wght400_grad0_opsz48"
@@ -35,18 +34,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
     <ListView
         android:id="@+id/lvDatabase"
-        android:layout_width="380dp"
-        android:layout_height="627dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnView"
+        android:layout_width="377dp"
+        android:layout_height="598dp"
+        android:clickable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.571"
+        app:layout_constraintVertical_bias="0.186"
         tools:ignore="UsingOnClickInXml" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
