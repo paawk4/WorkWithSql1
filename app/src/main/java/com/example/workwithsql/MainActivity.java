@@ -3,6 +3,8 @@ package com.example.workwithsql;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
+    public String findByName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +35,24 @@ public class MainActivity extends AppCompatActivity {
         ListView lv = findViewById(R.id.lvDatabase);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(getApplicationContext(), ((TextView) v).getText(),
-                        Toast.LENGTH_SHORT).show();
-                /*https://developer.alexanderklimov.ru/android/views/listview.php?ysclid=l85ua82xu5285648756#perform*/
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                String nameText, jobText, emailText;
+                TextView nameTv = (TextView)view.findViewById(R.id.Name);
+                nameText = nameTv.getText().toString();
+                TextView jobTv = (TextView)view.findViewById(R.id.Job);
+                jobText = jobTv.getText().toString();
+                TextView emailTv = (TextView)view.findViewById(R.id.Email);
+                emailText = emailTv.getText().toString();
+                setContentView(R.layout.edit_person);
+
+                TextView editName = findViewById(R.id.editName);
+                editName.setText(nameText);
+                TextView editJob = findViewById(R.id.editJob);
+                editJob.setText(jobText);
+                TextView editEmail = findViewById(R.id.editEmail);
+                editEmail.setText(emailText);
+                findByName = nameText;
             }
         });
     }
@@ -56,11 +74,13 @@ public class MainActivity extends AppCompatActivity {
     {
         setContentView(R.layout.create_person);
     }
-    public void GoBack(View v) { setContentView(R.layout.activity_main);}
+    public void GoBack(View v) {
+        setContentView(R.layout.activity_main);
+        GetList(v);
+    }
 
     Connection connection;
     String ConnectionResult = "";
-    Boolean isSuccess = false;
 
     @SuppressLint("NewApi")
     public void CreatePerson(View v){
@@ -82,12 +102,11 @@ public class MainActivity extends AppCompatActivity {
                 ConnectionHelper connectionHelper = new ConnectionHelper();
                 connection = connectionHelper.connectionClass();
                 if (connection != null){
-                    String query = " INSERT INTO Personal_Inf (name, job, email) VALUES ('" + name + "', '" + job + "', '" + email + "')";
+                    String query = "INSERT INTO Personal_Inf (name, job, email) VALUES ('" + name + "', '" + job + "', '" + email + "')";
                     Statement statement = connection.createStatement();
                     ResultSet resultSet = statement.executeQuery(query);
 
                     ConnectionResult = "Есть контакт";
-                    isSuccess = true;
                     connection.close();
                 }
                 else {
@@ -98,20 +117,43 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         setContentView(R.layout.activity_main);
+        GetList(v);
     }
+    public void OpenEditPerson(View v){
+        ListView lv = findViewById(R.id.lvDatabase);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                String nameText, jobText, emailText;
+                TextView nameTv = (TextView)view.findViewById(R.id.Name);
+                nameText = nameTv.getText().toString();
+                TextView jobTv = (TextView)view.findViewById(R.id.Job);
+                jobText = jobTv.getText().toString();
+                TextView emailTv = (TextView)view.findViewById(R.id.Email);
+                emailText = emailTv.getText().toString();
+                setContentView(R.layout.edit_person);
 
-    public void ViewEditPerson(View v) {
-        setContentView(R.layout.edit_person);
-
-
+                TextView editName = findViewById(R.id.editName);
+                editName.setText(nameText);
+                TextView editJob = findViewById(R.id.editJob);
+                editJob.setText(jobText);
+                TextView editEmail = findViewById(R.id.editEmail);
+                editEmail.setText(emailText);
+                findByName = nameText;
+            }
+        });
     }
-
     public void EditPerson(View v){
         String name = "", job = "", email = "";
 
         EditText edName = findViewById(R.id.editName);
         EditText edJob = findViewById(R.id.editJob);
         EditText edEmail = findViewById(R.id.editEmail);
+
+        name = edName.getText().toString();
+        job = edJob.getText().toString();
+        email = edEmail.getText().toString();
 
         if(name != "" || job != "" || email != ""){
             List<Map <String, String>> data = null;
@@ -121,12 +163,13 @@ public class MainActivity extends AppCompatActivity {
                 ConnectionHelper connectionHelper = new ConnectionHelper();
                 connection = connectionHelper.connectionClass();
                 if (connection != null){
-                    String query = " INSERT INTO Personal_Inf (name, job, email) VALUES ('" + name + "', '" + job + "', '" + email + "')";
+                    String query = "UPDATE Personal_Inf\n" +
+                            "SET name = '" + name + "', job = '" + job + "', email = '" + email + "'\n" +
+                            "WHERE name = '"+ findByName +"'";
                     Statement statement = connection.createStatement();
                     ResultSet resultSet = statement.executeQuery(query);
 
                     ConnectionResult = "Есть контакт";
-                    isSuccess = true;
                     connection.close();
                 }
                 else {
@@ -145,5 +188,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public void DeletePerson(View v){
         setContentView(R.layout.activity_main);
+        GetList(v);
     }
 }

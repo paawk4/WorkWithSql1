@@ -16,7 +16,6 @@
             android:layout_marginTop="144dp"
             android:autofillHints=""
             android:ems="10"
-            android:hint="Name Surname"
             android:inputType="textPersonName"
             android:textColor="#FFFFFFFF"
             android:textColorHint="#FFFFFFFF"
@@ -33,7 +32,6 @@
             android:layout_marginTop="44dp"
             android:autofillHints=""
             android:ems="10"
-            android:hint="Your job"
             android:inputType="text"
             android:textColor="#FFFFFFFF"
             android:textColorHint="#FFFFFFFF"
@@ -50,7 +48,6 @@
             android:layout_marginTop="36dp"
             android:autofillHints=""
             android:ems="10"
-            android:hint="Your email"
             android:inputType="textEmailAddress"
             android:textColor="#FFFFFFFF"
             android:textColorHint="#FFFFFFFF"
@@ -106,22 +103,5 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <EditText
-        android:id="@+id/edName2"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="144dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="Name Surname"
-        android:inputType="textPersonName"
-        android:textColor="#FFFFFFFF"
-        android:textColorHint="#FFFFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
