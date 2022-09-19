@@ -16,32 +16,29 @@ public class ListItem {
     String ConnectionResult = "";
     Boolean isSuccess = false;
 
-    public List<Map <String, String>> getList()
-    {
-        List<Map <String, String>> data = null;
-        data = new ArrayList<Map <String, String>>();
-        try
-        {
+    public List<Map<String, String>> getList() {
+        List<Map<String, String>> data = null;
+        data = new ArrayList<Map<String, String>>();
+        try {
             ConnectionHelper connectionHelper = new ConnectionHelper();
             connection = connectionHelper.connectionClass();
-            if (connection != null){
+            if (connection != null) {
                 String query = "Select * From Personal_Inf";
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query);
 
-                while (resultSet.next()){
-                    Map<String,String> dtName = new HashMap<String, String>();
-                    dtName.put("Name",resultSet.getString("name"));
-                    dtName.put("Job",resultSet.getString("job"));
-                    dtName.put("Email",resultSet.getString("email"));
+                while (resultSet.next()) {
+                    Map<String, String> dtName = new HashMap<String, String>();
+                    dtName.put("Name", resultSet.getString("name"));
+                    dtName.put("Job", resultSet.getString("job"));
+                    dtName.put("Email", resultSet.getString("email"));
 
                     data.add(dtName);
                 }
                 ConnectionResult = "Есть контакт";
                 isSuccess = true;
                 connection.close();
-            }
-            else {
+            } else {
                 ConnectionResult = "Не получилось";
             }
         } catch (SQLException throwables) {

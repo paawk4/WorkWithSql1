@@ -4,8 +4,10 @@
     <string name="enter">enter</string>
     <string name="find">Find</string>
     <string name="name">Name:</string>
-    <string name="create" />
-    <string name="job" />
-    <string name="email" />
-    <string name="goback" />
+    <string name="name_surname">Name Surname</string>
+    <string name="your_job">Your job</string>
+    <string name="your_email">Your email</string>
+    <string name="create">Create</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>

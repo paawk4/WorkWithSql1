@@ -7,12 +7,12 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btnCreate"
+        android:id="@+id/btnViewCreate"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/create"
-        android:onClick="ViewCreatePerson"
+        android:onClick="Navigation"
         app:icon="@drawable/ic_add_fill0_wght400_grad0_opsz48"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
@@ -20,14 +20,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.743"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,UsingOnClickInXml" />
 
     <Button
         android:id="@+id/btnView"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:contentDescription="@string/view"
-        android:onClick="GetList"
+        android:onClick="ListOperations"
         app:icon="@drawable/ic_refresh_fill0_wght400_grad0_opsz48"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
@@ -36,13 +36,15 @@
         app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.976"
+        tools:ignore="UsingOnClickInXml" />
 
     <ListView
         android:id="@+id/lvDatabase"
         android:layout_width="377dp"
         android:layout_height="598dp"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"

@@ -12,7 +12,7 @@
         android:layout_marginTop="144dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Name Surname"
+        android:hint="@string/name_surname"
         android:inputType="textPersonName"
         android:textColor="#FFFFFFFF"
         android:textColorHint="#FFFFFFFF"
@@ -29,7 +29,7 @@
         android:layout_marginTop="44dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Your job"
+        android:hint="@string/your_job"
         android:inputType="text"
         android:textColor="#FFFFFFFF"
         android:textColorHint="#FFFFFFFF"
@@ -46,7 +46,7 @@
         android:layout_marginTop="36dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Your email"
+        android:hint="@string/your_email"
         android:inputType="textEmailAddress"
         android:textColor="#FFFFFFFF"
         android:textColorHint="#FFFFFFFF"
@@ -57,11 +57,11 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
-        android:id="@+id/btnEd"
+        android:id="@+id/btnCreate"
         android:layout_width="150dp"
         android:layout_height="96dp"
-        android:onClick="CreatePerson"
-        android:text="Create"
+        android:onClick="DbOperations"
+        android:text="@string/create"
         android:textColor="#FFFFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,22 +69,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editEmail"
         app:layout_constraintVertical_bias="0.226"
-        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck,UsingOnClickInXml" />
 
     <Button
         android:id="@+id/btnGoback"
         android:layout_width="90dp"
         android:layout_height="96dp"
-        android:contentDescription="@string/goback"
-        android:onClick="GoBack"
+        android:onClick="Navigation"
         app:icon="@drawable/ic_arrow_back_ios_new_fill0_wght400_grad0_opsz48"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnEd"
+        app:layout_constraintEnd_toStartOf="@+id/btnCreate"
         app:layout_constraintHorizontal_bias="0.888"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editEmail"
         app:layout_constraintVertical_bias="0.226"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,UsingOnClickInXml" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
