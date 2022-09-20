@@ -9,16 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kotlin.collections.ArrayDeque;
-
 public class ListItem {
     Connection connection;
     String ConnectionResult = "";
     Boolean isSuccess = false;
 
     public List<Map<String, String>> getList() {
-        List<Map<String, String>> data = null;
-        data = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> data;
+        data = new ArrayList<>();
         try {
             ConnectionHelper connectionHelper = new ConnectionHelper();
             connection = connectionHelper.connectionClass();
@@ -28,7 +26,7 @@ public class ListItem {
                 ResultSet resultSet = statement.executeQuery(query);
 
                 while (resultSet.next()) {
-                    Map<String, String> dtName = new HashMap<String, String>();
+                    Map<String, String> dtName = new HashMap<>();
                     dtName.put("Name", resultSet.getString("name"));
                     dtName.put("Job", resultSet.getString("job"));
                     dtName.put("Email", resultSet.getString("email"));

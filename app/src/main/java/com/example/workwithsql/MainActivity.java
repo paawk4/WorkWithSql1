@@ -1,15 +1,15 @@
 package com.example.workwithsql;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         SimpleAdapter simpleAdapter;
         ListView listView = findViewById(R.id.lvDatabase);
 
-        List<Map<String, String>> myDataList = null;
+        List<Map<String, String>> myDataList;
         ListItem myData = new ListItem();
         myDataList = myData.getList();
 
@@ -41,26 +41,23 @@ public class MainActivity extends AppCompatActivity {
         simpleAdapter = new SimpleAdapter(MainActivity.this, myDataList, R.layout.list_template, fromView, toView);
         listView.setAdapter(simpleAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String nameText, jobText, emailText;
-                TextView nameTv = view.findViewById(R.id.Name);
-                nameText = nameTv.getText().toString();
-                TextView jobTv = view.findViewById(R.id.Job);
-                jobText = jobTv.getText().toString();
-                TextView emailTv = view.findViewById(R.id.Email);
-                emailText = emailTv.getText().toString();
-                setContentView(R.layout.edit_person);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String nameText, jobText, emailText;
+            TextView nameTv = view.findViewById(R.id.Name);
+            nameText = nameTv.getText().toString();
+            TextView jobTv = view.findViewById(R.id.Job);
+            jobText = jobTv.getText().toString();
+            TextView emailTv = view.findViewById(R.id.Email);
+            emailText = emailTv.getText().toString();
+            setContentView(R.layout.edit_person);
 
-                TextView editName = findViewById(R.id.editName);
-                editName.setText(nameText);
-                TextView editJob = findViewById(R.id.editJob);
-                editJob.setText(jobText);
-                TextView editEmail = findViewById(R.id.editEmail);
-                editEmail.setText(emailText);
-                findByName = nameText;
-            }
+            TextView editName = findViewById(R.id.editName);
+            editName.setText(nameText);
+            TextView editJob = findViewById(R.id.editJob);
+            editJob.setText(jobText);
+            TextView editEmail = findViewById(R.id.editEmail);
+            editEmail.setText(emailText);
+            findByName = nameText;
         });
     }
 
@@ -71,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnEdit = findViewById(R.id.btnEdit);
         Button btnDelete = findViewById(R.id.btnDelete);
 
-        String name = "", job = "", email = "";
+        String name, job, email;
 
         EditText edName = findViewById(R.id.editName);
         EditText edJob = findViewById(R.id.editJob);
@@ -81,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         job = edJob.getText().toString();
         email = edEmail.getText().toString();
 
-        if (name != "" || job != "" || email != "") {
+        if (!name.equals("") & !job.equals("") & !email.equals("")) {
             try {
                 ConnectionHelper connectionHelper = new ConnectionHelper();
                 connection = connectionHelper.connectionClass();
@@ -98,13 +95,17 @@ public class MainActivity extends AppCompatActivity {
                 Statement statement = connection.createStatement();
                 statement.executeQuery(query);
                 connection.close();
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException throwable) {
+                throwable.printStackTrace();
             }
+            setContentView(R.layout.activity_main);
+            ListOperations(v);
         }
-        setContentView(R.layout.activity_main);
-        ListOperations(v);
+        else {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Введите данные", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     public void Navigation(View v) {
