@@ -1,29 +1,55 @@
 package com.example.workwithsql;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import androidx.fragment.app.Fragment;
+import android.os.Environment;
+import android.view.LayoutInflater;
+import android.os.FileUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
-
+//https://programmerworld.co/android/how-to-store-image-in-ms-sql-server-and-retrieve-it-from-your-android-app/
 public class MainActivity extends AppCompatActivity {
+    private static final int MY_RESULT_CODE_FILECHOOSER = 2000;
+    private static final String LOG_TAG = "Android Example";
     public String findByName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+
         View v = findViewById(com.google.android.material.R.id.ghost_view);
         ListOperations(v);
     }
@@ -67,16 +93,18 @@ public class MainActivity extends AppCompatActivity {
         Button btnCreate = findViewById(R.id.btnCreate);
         Button btnEdit = findViewById(R.id.btnEdit);
         Button btnDelete = findViewById(R.id.btnDelete);
+        Button btnAddImage = findViewById(R.id.btnAddImage);
 
-        String name, job, email;
+        ImageView avatar = findViewById(R.id.ivAvatar);
 
         EditText edName = findViewById(R.id.editName);
         EditText edJob = findViewById(R.id.editJob);
         EditText edEmail = findViewById(R.id.editEmail);
 
-        name = edName.getText().toString();
-        job = edJob.getText().toString();
-        email = edEmail.getText().toString();
+        String name = edName.getText().toString();
+        String job = edJob.getText().toString();
+        String email = edEmail.getText().toString();
+
 
         if (!name.equals("") & !job.equals("") & !email.equals("")) {
             try {
@@ -84,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 connection = connectionHelper.connectionClass();
                 String query = "";
                 if (v.equals(btnCreate)) {
-                    query = "INSERT INTO Personal_Inf (name, job, email) VALUES ('" + name + "', '" + job + "', '" + email + "')";
+                    query = "INSERT INTO Personal_Inf (name, job, email, image) VALUES ('" + name + "', '" + job + "', '" + email + "')";
                 } else if (v.equals(btnEdit)) {
                     query = "UPDATE Personal_Inf\n" +
                             "SET name = '" + name + "', job = '" + job + "', email = '" + email + "'\n" +
@@ -92,6 +120,18 @@ public class MainActivity extends AppCompatActivity {
                 } else if (v.equals(btnDelete)) {
                     query = "DELETE Personal_Inf WHERE name = '" + findByName + "'";
                 }
+//                else if(v.equals(btnAddImage)){
+//                    String filePath = Environment.getExternalStorageDirectory().getPath() + "/Downloads/image.jpg";
+//
+//                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+//                    avatar.setImageBitmap(bitmap);
+//
+//                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
+//                    byte[] bytesImage = byteArrayOutputStream.toByteArray();
+//
+//
+//                }
                 Statement statement = connection.createStatement();
                 statement.executeQuery(query);
                 connection.close();
@@ -106,6 +146,28 @@ public class MainActivity extends AppCompatActivity {
                     "Введите данные", Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public void ImageView(View v){
+        Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFileIntent.setType("*/*");
+        // Only return URIs that can be opened with ContentResolver
+        chooseFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        chooseFileIntent = Intent.createChooser(chooseFileIntent, "Choose a file");
+        startActivityForResult(chooseFileIntent, MY_RESULT_CODE_FILECHOOSER);
+
+
+//        ImageView image = findViewById(R.id.ivAvatar);
+//
+//        String filePath = Environment.getExternalStorageDirectory().getPath() + "/Download/image.jpg";
+//
+//        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+//        image.setImageBitmap(bitmap);
+
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
     }
 
     public void Navigation(View v) {
