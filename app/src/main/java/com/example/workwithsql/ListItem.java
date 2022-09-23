@@ -1,5 +1,9 @@
 package com.example.workwithsql;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +34,7 @@ public class ListItem {
                     dtName.put("Name", resultSet.getString("name"));
                     dtName.put("Job", resultSet.getString("job"));
                     dtName.put("Email", resultSet.getString("email"));
+                    dtName.put("Image", resultSet.getString("image"));
 
                     data.add(dtName);
                 }

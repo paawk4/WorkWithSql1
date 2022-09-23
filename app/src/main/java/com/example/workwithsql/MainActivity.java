@@ -8,10 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import android.os.Environment;
-import android.view.LayoutInflater;
-import android.os.FileUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,25 +19,20 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
-//https://programmerworld.co/android/how-to-store-image-in-ms-sql-server-and-retrieve-it-from-your-android-app/
 public class MainActivity extends AppCompatActivity {
     private static final int MY_RESULT_CODE_FILECHOOSER = 2000;
     private static final String LOG_TAG = "Android Example";
     public String findByName;
+    String encodedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +85,6 @@ public class MainActivity extends AppCompatActivity {
         Button btnCreate = findViewById(R.id.btnCreate);
         Button btnEdit = findViewById(R.id.btnEdit);
         Button btnDelete = findViewById(R.id.btnDelete);
-        Button btnAddImage = findViewById(R.id.btnAddImage);
-
-        ImageView avatar = findViewById(R.id.ivAvatar);
 
         EditText edName = findViewById(R.id.editName);
         EditText edJob = findViewById(R.id.editJob);
@@ -112,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 connection = connectionHelper.connectionClass();
                 String query = "";
                 if (v.equals(btnCreate)) {
-                    query = "INSERT INTO Personal_Inf (name, job, email, image) VALUES ('" + name + "', '" + job + "', '" + email + "')";
+                    query = "INSERT INTO Personal_Inf (name, job, email, image) VALUES ('" + name
+                            + "', '" + job + "', '" + email + "','" + encodedImage + "')";
                 } else if (v.equals(btnEdit)) {
                     query = "UPDATE Personal_Inf\n" +
                             "SET name = '" + name + "', job = '" + job + "', email = '" + email + "'\n" +
@@ -120,18 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 } else if (v.equals(btnDelete)) {
                     query = "DELETE Personal_Inf WHERE name = '" + findByName + "'";
                 }
-//                else if(v.equals(btnAddImage)){
-//                    String filePath = Environment.getExternalStorageDirectory().getPath() + "/Downloads/image.jpg";
-//
-//                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-//                    avatar.setImageBitmap(bitmap);
-//
-//                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
-//                    byte[] bytesImage = byteArrayOutputStream.toByteArray();
-//
-//
-//                }
                 Statement statement = connection.createStatement();
                 statement.executeQuery(query);
                 connection.close();
@@ -157,17 +135,37 @@ public class MainActivity extends AppCompatActivity {
 
         chooseFileIntent = Intent.createChooser(chooseFileIntent, "Choose a file");
         startActivityForResult(chooseFileIntent, MY_RESULT_CODE_FILECHOOSER);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MY_RESULT_CODE_FILECHOOSER) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null) {
+                    Uri fileUri = data.getData();
+                    Log.i(LOG_TAG, "Uri: " + fileUri);
 
-//        ImageView image = findViewById(R.id.ivAvatar);
-//
-//        String filePath = Environment.getExternalStorageDirectory().getPath() + "/Download/image.jpg";
-//
-//        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-//        image.setImageBitmap(bitmap);
+                    String filePath;
+                    try {
+                        filePath = FileUtils.getPath(this.getBaseContext(), fileUri);
+                        ImageView image = findViewById(R.id.Avatar);
+                        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+                        image.setImageBitmap(bitmap);
 
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                        byte[] byteArray = stream.toByteArray();
+
+                        encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "Error: " + e);
+                        Toast.makeText(this.getBaseContext(), "Error: " + e, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void Navigation(View v) {
