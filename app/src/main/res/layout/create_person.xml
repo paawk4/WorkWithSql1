@@ -86,7 +86,7 @@
         tools:ignore="MissingConstraints,SpeakableTextPresentCheck,UsingOnClickInXml" />
 
     <ImageView
-        android:id="@+id/Avatar"
+        android:id="@+id/ivAvatar"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:contentDescription="@string/todo"
@@ -107,7 +107,7 @@
         android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.243"
-        app:layout_constraintStart_toEndOf="@+id/Avatar"
+        app:layout_constraintStart_toEndOf="@+id/ivAvatar"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UsingOnClickInXml" />
 

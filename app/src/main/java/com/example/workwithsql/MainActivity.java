@@ -28,6 +28,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+
+
 public class MainActivity extends AppCompatActivity {
     private static final int MY_RESULT_CODE_FILECHOOSER = 2000;
     private static final String LOG_TAG = "Android Example";
@@ -49,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     public void ListOperations(View v) {
         SimpleAdapter simpleAdapter;
         ListView listView = findViewById(R.id.lvDatabase);
-
         List<Map<String, String>> myDataList;
         ListItem myData = new ListItem();
         myDataList = myData.getList();
@@ -58,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         int[] toView = {R.id.Name, R.id.Job, R.id.Email};
         simpleAdapter = new SimpleAdapter(MainActivity.this, myDataList, R.layout.list_template, fromView, toView);
         listView.setAdapter(simpleAdapter);
+
+        String encodeImage = myDataList.get(0).get("Image");
+        ImageView iv = findViewById(R.id.Avatar);
+        decodeImage(iv, encodeImage);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
             String nameText, jobText, emailText;
@@ -78,7 +83,12 @@ public class MainActivity extends AppCompatActivity {
             findByName = nameText;
         });
     }
-
+    public void decodeImage(ImageView iv, String input)
+    {
+        byte[] decodedByte = Base64.decode(input, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+        //iv.setImageBitmap(bitmap);
+    }
     public void DbOperations(View v) {
         Connection connection;
 
@@ -148,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     String filePath;
                     try {
                         filePath = FileUtils.getPath(this.getBaseContext(), fileUri);
-                        ImageView image = findViewById(R.id.Avatar);
+                        ImageView image = findViewById(R.id.ivAvatar);
                         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
                         image.setImageBitmap(bitmap);
 
