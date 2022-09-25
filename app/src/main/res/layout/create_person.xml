@@ -57,7 +57,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
-        android:id="@+id/btnGoback"
+        android:id="@+id/btnGoBack"
         android:layout_width="90dp"
         android:layout_height="96dp"
         android:onClick="Navigation"

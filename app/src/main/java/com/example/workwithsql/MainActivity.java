@@ -44,25 +44,31 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
-        View v = findViewById(com.google.android.material.R.id.ghost_view);
-        ListOperations(v);
+//        View v = findViewById(com.google.android.material.R.id.ghost_view);
+//        ListOperations(v);
     }
 
     public void ListOperations(View v) {
         SimpleAdapter simpleAdapter;
         ListView listView = findViewById(R.id.lvDatabase);
-        List<Map<String, String>> myDataList;
+        List<Map<String, Object>> myDataList;
         ListItem myData = new ListItem();
         myDataList = myData.getList();
 
-        String[] fromView = {"Name", "Job", "Email"};
-        int[] toView = {R.id.Name, R.id.Job, R.id.Email};
+        String[] fromView = {"Name", "Job", "Email", "Image"};
+        int[] toView = {R.id.Name, R.id.Job, R.id.Email, R.id.list_itemAvatar};
         simpleAdapter = new SimpleAdapter(MainActivity.this, myDataList, R.layout.list_template, fromView, toView);
-        listView.setAdapter(simpleAdapter);
+        simpleAdapter.setViewBinder((view, data, textRepresentation) -> {
+            if( (view instanceof ImageView) & (data instanceof Bitmap) ) {
+                ImageView iv = (ImageView) view;
+                Bitmap bm = (Bitmap) data;
+                iv.setImageBitmap(bm);
+                return true;
+            }
+            return false;
 
-        String encodeImage = myDataList.get(0).get("Image");
-        ImageView iv = findViewById(R.id.Avatar);
-        decodeImage(iv, encodeImage);
+        });
+        listView.setAdapter(simpleAdapter);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
             String nameText, jobText, emailText;
@@ -72,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
             jobText = jobTv.getText().toString();
             TextView emailTv = view.findViewById(R.id.Email);
             emailText = emailTv.getText().toString();
+            ImageView avatar = view.findViewById(R.id.ivAvatar);
+
             setContentView(R.layout.edit_person);
 
             TextView editName = findViewById(R.id.editName);
@@ -83,12 +91,7 @@ public class MainActivity extends AppCompatActivity {
             findByName = nameText;
         });
     }
-    public void decodeImage(ImageView iv, String input)
-    {
-        byte[] decodedByte = Base64.decode(input, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
-        //iv.setImageBitmap(bitmap);
-    }
+
     public void DbOperations(View v) {
         Connection connection;
 
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                             + "', '" + job + "', '" + email + "','" + encodedImage + "')";
                 } else if (v.equals(btnEdit)) {
                     query = "UPDATE Personal_Inf\n" +
-                            "SET name = '" + name + "', job = '" + job + "', email = '" + email + "'\n" +
+                            "SET name = '" + name + "', job = '" + job + "', email = '" + email + "', image = '" + encodedImage + "'\n" +
                             "WHERE name = '" + findByName + "'";
                 } else if (v.equals(btnDelete)) {
                     query = "DELETE Personal_Inf WHERE name = '" + findByName + "'";
@@ -180,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void Navigation(View v) {
         Button viewCreate = findViewById(R.id.btnViewCreate);
-        Button goBack = findViewById(R.id.btnGoback);
+        Button goBack = findViewById(R.id.btnGoBack);
         if (v.equals(viewCreate)) {
             setContentView(R.layout.create_person);
         } else if (v.equals(goBack)) {

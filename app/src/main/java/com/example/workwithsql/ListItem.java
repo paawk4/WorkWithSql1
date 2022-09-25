@@ -18,9 +18,11 @@ public class ListItem {
     String ConnectionResult = "";
     Boolean isSuccess = false;
 
-    public List<Map<String, String>> getList() {
-        List<Map<String, String>> data;
+
+    public List<Map<String, Object>> getList() {
+        List<Map<String, Object>> data;
         data = new ArrayList<>();
+
         try {
             ConnectionHelper connectionHelper = new ConnectionHelper();
             connection = connectionHelper.connectionClass();
@@ -30,12 +32,14 @@ public class ListItem {
                 ResultSet resultSet = statement.executeQuery(query);
 
                 while (resultSet.next()) {
-                    Map<String, String> dtName = new HashMap<>();
+                    Map<String, Object> dtName = new HashMap<>();
                     dtName.put("Name", resultSet.getString("name"));
                     dtName.put("Job", resultSet.getString("job"));
                     dtName.put("Email", resultSet.getString("email"));
-                    dtName.put("Image", resultSet.getString("image"));
-
+                    String decodeImage = resultSet.getString("image");
+                    byte[] decodedString = Base64.decode(decodeImage,Base64.DEFAULT);
+                    Bitmap base64Bitmap = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+                    dtName.put("Image", base64Bitmap);
                     data.add(dtName);
                 }
                 ConnectionResult = "Есть контакт";
