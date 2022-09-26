@@ -10,9 +10,8 @@
         <item name="colorSecondaryVariant">#8A8A8A</item>
         <item name="colorOnSecondary">#626ED9</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:background">#202020</item>
-
     </style>
 </resources>

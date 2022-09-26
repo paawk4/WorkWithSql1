@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
@@ -35,17 +36,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "Android Example";
     public String findByName;
     String encodedImage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        setTitle("Employee Information");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
-//        View v = findViewById(com.google.android.material.R.id.ghost_view);
+//        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) View v = findViewById(com.google.android.material.R.id.ghost_view);
 //        ListOperations(v);
+
     }
 
     public void ListOperations(View v) {
@@ -53,43 +54,50 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.lvDatabase);
         List<Map<String, Object>> myDataList;
         ListItem myData = new ListItem();
-        myDataList = myData.getList();
+        try{
+            myDataList = myData.getList();
 
-        String[] fromView = {"Name", "Job", "Email", "Image"};
-        int[] toView = {R.id.Name, R.id.Job, R.id.Email, R.id.list_itemAvatar};
-        simpleAdapter = new SimpleAdapter(MainActivity.this, myDataList, R.layout.list_template, fromView, toView);
-        simpleAdapter.setViewBinder((view, data, textRepresentation) -> {
-            if( (view instanceof ImageView) & (data instanceof Bitmap) ) {
-                ImageView iv = (ImageView) view;
-                Bitmap bm = (Bitmap) data;
-                iv.setImageBitmap(bm);
-                return true;
-            }
-            return false;
+            String[] fromView = {"Name", "Job", "Email", "Image"};
+            int[] toView = {R.id.Name, R.id.Job, R.id.Email, R.id.list_itemAvatar};
+            simpleAdapter = new SimpleAdapter(MainActivity.this, myDataList, R.layout.list_template, fromView, toView);
+            simpleAdapter.setViewBinder((view, data, textRepresentation) -> {
+                if( (view instanceof ImageView) & (data instanceof Bitmap) ) {
+                    ImageView iv = (ImageView) view;
+                    Bitmap bm = (Bitmap) data;
+                    iv.setImageBitmap(bm);
+                    return true;
+                }
+                return false;
 
-        });
-        listView.setAdapter(simpleAdapter);
+            });
+            listView.setAdapter(simpleAdapter);
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                String nameText, jobText, emailText;
+                TextView nameTv = view.findViewById(R.id.Name);
+                nameText = nameTv.getText().toString();
+                TextView jobTv = view.findViewById(R.id.Job);
+                jobText = jobTv.getText().toString();
+                TextView emailTv = view.findViewById(R.id.Email);
+                emailText = emailTv.getText().toString();
+                ImageView avatar = view.findViewById(R.id.list_itemAvatar);
+                Bitmap avatarBm = ((BitmapDrawable)avatar.getDrawable()).getBitmap();
+                setContentView(R.layout.edit_person);
 
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            String nameText, jobText, emailText;
-            TextView nameTv = view.findViewById(R.id.Name);
-            nameText = nameTv.getText().toString();
-            TextView jobTv = view.findViewById(R.id.Job);
-            jobText = jobTv.getText().toString();
-            TextView emailTv = view.findViewById(R.id.Email);
-            emailText = emailTv.getText().toString();
-            ImageView avatar = view.findViewById(R.id.ivAvatar);
-
-            setContentView(R.layout.edit_person);
-
-            TextView editName = findViewById(R.id.editName);
-            editName.setText(nameText);
-            TextView editJob = findViewById(R.id.editJob);
-            editJob.setText(jobText);
-            TextView editEmail = findViewById(R.id.editEmail);
-            editEmail.setText(emailText);
-            findByName = nameText;
-        });
+                TextView editName = findViewById(R.id.editName);
+                editName.setText(nameText);
+                TextView editJob = findViewById(R.id.editJob);
+                editJob.setText(jobText);
+                TextView editEmail = findViewById(R.id.editEmail);
+                editEmail.setText(emailText);
+                ImageView ivAvatar = findViewById(R.id.ivAvatar);
+                ivAvatar.setImageBitmap(avatarBm);
+                findByName = nameText;
+            });
+        }
+        catch (Exception ex){
+            Log.e(LOG_TAG, "Error: " + ex);
+            Toast.makeText(this.getBaseContext(), "Error: " + ex, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void DbOperations(View v) {
@@ -102,13 +110,22 @@ public class MainActivity extends AppCompatActivity {
         EditText edName = findViewById(R.id.editName);
         EditText edJob = findViewById(R.id.editJob);
         EditText edEmail = findViewById(R.id.editEmail);
+        ImageView ivAvatar = findViewById(R.id.ivAvatar);
 
         String name = edName.getText().toString();
         String job = edJob.getText().toString();
         String email = edEmail.getText().toString();
 
 
-        if (!name.equals("") & !job.equals("") & !email.equals("")) {
+        if (!name.equals("") & !job.equals("") & !email.equals("") & !ivAvatar.toString().equals("")) {
+            Bitmap avatarBm = ((BitmapDrawable)ivAvatar.getDrawable()).getBitmap();
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            avatarBm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+            byte[] byteArray = stream.toByteArray();
+
+            String encodedImageUpdate = Base64.encodeToString(byteArray, Base64.DEFAULT);
             try {
                 ConnectionHelper connectionHelper = new ConnectionHelper();
                 connection = connectionHelper.connectionClass();
@@ -118,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             + "', '" + job + "', '" + email + "','" + encodedImage + "')";
                 } else if (v.equals(btnEdit)) {
                     query = "UPDATE Personal_Inf\n" +
-                            "SET name = '" + name + "', job = '" + job + "', email = '" + email + "', image = '" + encodedImage + "'\n" +
+                            "SET name = '" + name + "', job = '" + job + "', email = '" + email + "', image = '" + encodedImageUpdate + "'\n" +
                             "WHERE name = '" + findByName + "'";
                 } else if (v.equals(btnDelete)) {
                     query = "DELETE Personal_Inf WHERE name = '" + findByName + "'";
@@ -143,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
     public void ImageView(View v){
         Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFileIntent.setType("*/*");
-        // Only return URIs that can be opened with ContentResolver
         chooseFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
 
         chooseFileIntent = Intent.createChooser(chooseFileIntent, "Choose a file");
@@ -164,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
                         ImageView image = findViewById(R.id.ivAvatar);
                         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
                         image.setImageBitmap(bitmap);
-
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 

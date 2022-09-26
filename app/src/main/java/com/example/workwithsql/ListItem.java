@@ -22,7 +22,6 @@ public class ListItem {
     public List<Map<String, Object>> getList() {
         List<Map<String, Object>> data;
         data = new ArrayList<>();
-
         try {
             ConnectionHelper connectionHelper = new ConnectionHelper();
             connection = connectionHelper.connectionClass();
@@ -37,6 +36,9 @@ public class ListItem {
                     dtName.put("Job", resultSet.getString("job"));
                     dtName.put("Email", resultSet.getString("email"));
                     String decodeImage = resultSet.getString("image");
+
+
+
                     byte[] decodedString = Base64.decode(decodeImage,Base64.DEFAULT);
                     Bitmap base64Bitmap = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
                     dtName.put("Image", base64Bitmap);
