@@ -6,45 +6,67 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnViewCreate"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:contentDescription="@string/create"
-        android:onClick="Navigation"
-        app:icon="@drawable/ic_add_fill0_wght400_grad0_opsz48"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnView"
-        tools:ignore="SpeakableTextPresentCheck,UsingOnClickInXml" />
-
-    <Button
-        android:id="@+id/btnView"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:contentDescription="@string/view"
-        android:onClick="ListOperations"
-        app:icon="@drawable/ic_refresh_fill0_wght400_grad0_opsz48"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Header"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="UsingOnClickInXml" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/btnView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="NotSibling">
+
+        <Button
+            android:id="@+id/btnViewCreate"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:contentDescription="@string/create"
+            android:onClick="Navigation"
+            app:icon="@drawable/ic_add_fill0_wght400_grad0_opsz48"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingConstraints,SpeakableTextPresentCheck,UsingOnClickInXml" />
+
+        <Button
+            android:id="@+id/btnView"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:contentDescription="@string/view"
+            android:onClick="ListOperations"
+            app:icon="@drawable/ic_refresh_fill0_wght400_grad0_opsz48"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints,UsingOnClickInXml" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profiles"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnViewCreate"
+            app:layout_constraintStart_toEndOf="@+id/btnView"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
         android:id="@+id/lvDatabase"
         android:layout_width="wrap_content"
-        android:layout_height="650dp"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
+        android:minHeight="48dp"
         android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="UsingOnClickInXml" />
+        app:layout_constraintTop_toBottomOf="@+id/Header"
+        tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
