@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Employee Information");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
-
 //        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) View v = findViewById(com.google.android.material.R.id.ghost_view);
 //        ListOperations(v);
 
@@ -179,11 +178,12 @@ public class MainActivity extends AppCompatActivity {
                         filePath = FileUtils.getPath(this.getBaseContext(), fileUri);
                         ImageView image = findViewById(R.id.ivAvatar);
                         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-                        image.setImageBitmap(bitmap);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
-                        byte[] byteArray = stream.toByteArray();
+                        ByteArrayOutputStream outStream = BitmapCompress.BitmapCompressor(bitmap);
+
+                        image.setImageBitmap(bitmap);
+
+                        byte[] byteArray = outStream.toByteArray();
 
                         encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
                     } catch (Exception e) {

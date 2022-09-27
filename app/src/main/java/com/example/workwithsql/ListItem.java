@@ -37,9 +37,7 @@ public class ListItem {
                     dtName.put("Email", resultSet.getString("email"));
                     String decodeImage = resultSet.getString("image");
 
-
-
-                    byte[] decodedString = Base64.decode(decodeImage,Base64.DEFAULT);
+                      byte[] decodedString = Base64.decode(decodeImage,Base64.DEFAULT);
                     Bitmap base64Bitmap = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
                     dtName.put("Image", base64Bitmap);
                     data.add(dtName);
