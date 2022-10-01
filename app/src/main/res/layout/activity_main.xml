@@ -86,13 +86,14 @@
 
         <Button
             android:id="@+id/btnSort"
-            android:layout_width="45dp"
+            android:layout_width="48dp"
             android:layout_height="45dp"
             app:icon="@drawable/sort_fill0_wght400_grad0_opsz48"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconSize="30dp"
-            app:layout_constraintStart_toEndOf="@+id/btnView" />
+            app:layout_constraintStart_toEndOf="@+id/btnView"
+            tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
