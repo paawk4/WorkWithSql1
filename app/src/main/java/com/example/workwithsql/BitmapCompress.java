@@ -3,10 +3,9 @@ package com.example.workwithsql;
 import android.graphics.Bitmap;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class BitmapCompress {
-    public static ByteArrayOutputStream BitmapCompressor(Bitmap b) throws IOException {
+    public static ByteArrayOutputStream BitmapCompressor(Bitmap b) {
 
         int origWidth = b.getWidth();
         int origHeight = b.getHeight();

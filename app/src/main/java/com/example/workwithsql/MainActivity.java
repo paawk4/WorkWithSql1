@@ -150,36 +150,33 @@ public class MainActivity extends AppCompatActivity {
 
     public void Search(View v) {
         EditText searchBar = findViewById(R.id.searchBar);
-        searchBar.setVisibility(View.VISIBLE);
         TextView tw = findViewById(R.id.textView2);
-        tw.setVisibility(View.GONE);
+        if(searchBar.isFocused()){
+            searchBar.setVisibility(View.GONE);
+            tw.setVisibility(View.VISIBLE);
+        }else{
+            searchBar.setVisibility(View.VISIBLE);
+            tw.setVisibility(View.GONE);
 
-        searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if (s.toString().equals("")) {
-                    ListView lv = findViewById(R.id.lvDatabase);
-
-                    profileAdapter = new ProfileAdapter(MainActivity.this, profileList_s);
-                    lv.setAdapter(profileAdapter);
-                } else {
-                    for (Profile item : profileList_s) {
-                        if (!item.name.contains(s.toString())) {
-                            profileList.remove(item);
-                        }
-                    }
-                    profileAdapter.notifyDataSetChanged();
+            searchBar.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
+                @Override
+                public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                    profileAdapter.getFilter().filter(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
+        }
+
 
     }
+
 
     public void ListOperations(View v) {
         ListView listViewDB = findViewById(R.id.lvDatabase);
