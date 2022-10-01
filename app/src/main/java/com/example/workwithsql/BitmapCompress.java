@@ -11,7 +11,7 @@ public class BitmapCompress {
         int origWidth = b.getWidth();
         int origHeight = b.getHeight();
 
-        final int destWidth = 500;//or the width you need
+        final int destWidth = 300;//or the width you need
 
         ByteArrayOutputStream outStream = null;
         if (origWidth > destWidth) {
@@ -22,7 +22,7 @@ public class BitmapCompress {
             outStream = new ByteArrayOutputStream();
             // compress to the format you want, JPEG, PNG...
             // 70 is the 0-100 quality percentage
-            b2.compress(Bitmap.CompressFormat.PNG, 50, outStream);
+            b2.compress(Bitmap.CompressFormat.PNG, 20, outStream);
 
         }
         return outStream;

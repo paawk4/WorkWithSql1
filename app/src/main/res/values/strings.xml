@@ -12,4 +12,5 @@
     <string name="delete">Delete</string>
     <string name="todo">TODO</string>
     <string name="add">ADD</string>
+    <string name="search">search</string>
 </resources>

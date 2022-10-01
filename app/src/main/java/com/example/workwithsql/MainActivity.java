@@ -1,6 +1,7 @@
 package com.example.workwithsql;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,17 +27,24 @@ import androidx.core.app.ActivityCompat;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
     private static final int MY_RESULT_CODE_FILECHOOSER = 2000;
     private static final String LOG_TAG = "Android Example";
-    public String findByName;
+    String findByName;
     String encodedImage;
+    ArrayList<Profile> profileList = new ArrayList<>();
+    ArrayList<Profile> profileList_s;
+    ProfileAdapter profileAdapter;
+    Connection connection;
+
+    ConnectionHelper connectionHelper = new ConnectionHelper();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,65 +52,11 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Employee Information");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
-//        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) View v = findViewById(com.google.android.material.R.id.ghost_view);
-//        ListOperations(v);
-
-    }
-
-    public void ListOperations(View v) {
-        SimpleAdapter simpleAdapter;
-        ListView listView = findViewById(R.id.lvDatabase);
-        List<Map<String, Object>> myDataList;
-        ListItem myData = new ListItem();
-        try{
-            myDataList = myData.getList();
-
-            String[] fromView = {"Name", "Job", "Email", "Image"};
-            int[] toView = {R.id.Name, R.id.Job, R.id.Email, R.id.list_itemAvatar};
-            simpleAdapter = new SimpleAdapter(MainActivity.this, myDataList, R.layout.list_template, fromView, toView);
-            simpleAdapter.setViewBinder((view, data, textRepresentation) -> {
-                if( (view instanceof ImageView) & (data instanceof Bitmap) ) {
-                    ImageView iv = (ImageView) view;
-                    Bitmap bm = (Bitmap) data;
-                    iv.setImageBitmap(bm);
-                    return true;
-                }
-                return false;
-
-            });
-            listView.setAdapter(simpleAdapter);
-            listView.setOnItemClickListener((parent, view, position, id) -> {
-                String nameText, jobText, emailText;
-                TextView nameTv = view.findViewById(R.id.Name);
-                nameText = nameTv.getText().toString();
-                TextView jobTv = view.findViewById(R.id.Job);
-                jobText = jobTv.getText().toString();
-                TextView emailTv = view.findViewById(R.id.Email);
-                emailText = emailTv.getText().toString();
-                ImageView avatar = view.findViewById(R.id.list_itemAvatar);
-                Bitmap avatarBm = ((BitmapDrawable)avatar.getDrawable()).getBitmap();
-                setContentView(R.layout.edit_person);
-
-                TextView editName = findViewById(R.id.editName);
-                editName.setText(nameText);
-                TextView editJob = findViewById(R.id.editJob);
-                editJob.setText(jobText);
-                TextView editEmail = findViewById(R.id.editEmail);
-                editEmail.setText(emailText);
-                ImageView ivAvatar = findViewById(R.id.ivAvatar);
-                ivAvatar.setImageBitmap(avatarBm);
-                findByName = nameText;
-            });
-        }
-        catch (Exception ex){
-            Log.e(LOG_TAG, "Error: " + ex);
-            Toast.makeText(this.getBaseContext(), "Error: " + ex, Toast.LENGTH_SHORT).show();
-        }
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) View v = findViewById(com.google.android.material.R.id.ghost_view);
+        ListOperations(v);
     }
 
     public void DbOperations(View v) {
-        Connection connection;
-
         Button btnCreate = findViewById(R.id.btnCreate);
         Button btnEdit = findViewById(R.id.btnEdit);
         Button btnDelete = findViewById(R.id.btnDelete);
@@ -115,9 +70,8 @@ public class MainActivity extends AppCompatActivity {
         String job = edJob.getText().toString();
         String email = edEmail.getText().toString();
 
-
-        if (!name.equals("") & !job.equals("") & !email.equals("") & !ivAvatar.toString().equals("")) {
-            Bitmap avatarBm = ((BitmapDrawable)ivAvatar.getDrawable()).getBitmap();
+        if (!name.equals("") & !job.equals("") & !email.equals("") & !((BitmapDrawable) ivAvatar.getDrawable()).getBitmap().toString().equals("")) {
+            Bitmap avatarBm = ((BitmapDrawable) ivAvatar.getDrawable()).getBitmap();
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             avatarBm.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -126,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
             String encodedImageUpdate = Base64.encodeToString(byteArray, Base64.DEFAULT);
             try {
-                ConnectionHelper connectionHelper = new ConnectionHelper();
                 connection = connectionHelper.connectionClass();
                 String query = "";
                 if (v.equals(btnCreate)) {
@@ -147,8 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
             setContentView(R.layout.activity_main);
             ListOperations(v);
-        }
-        else {
+        } else {
             Toast toast = Toast.makeText(getApplicationContext(),
                     "Введите данные", Toast.LENGTH_SHORT);
             toast.show();
@@ -156,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings("deprecation")
-    public void ImageView(View v){
+    public void ImageView(View v) {
         Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFileIntent.setType("*/*");
         chooseFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -195,6 +147,89 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    public void Search(View v) {
+        EditText searchBar = findViewById(R.id.searchBar);
+        searchBar.setVisibility(View.VISIBLE);
+        TextView tw = findViewById(R.id.textView2);
+        tw.setVisibility(View.GONE);
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.toString().equals("")) {
+                    ListView lv = findViewById(R.id.lvDatabase);
+
+                    profileAdapter = new ProfileAdapter(MainActivity.this, profileList_s);
+                    lv.setAdapter(profileAdapter);
+                } else {
+                    for (Profile item : profileList_s) {
+                        if (!item.name.contains(s.toString())) {
+                            profileList.remove(item);
+                        }
+                    }
+                    profileAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+
+    }
+
+    public void ListOperations(View v) {
+        ListView listViewDB = findViewById(R.id.lvDatabase);
+        try {
+            profileList.clear();
+            connection = connectionHelper.connectionClass();
+            if (connection != null) {
+                String query = "Select * From Personal_Inf";
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query);
+
+                while (resultSet.next()) {
+                    String decodeImage = resultSet.getString("image");
+                    byte[] decodedString = Base64.decode(decodeImage, Base64.DEFAULT);
+                    Bitmap base64Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    profileList.add(new Profile(resultSet.getString("name"), resultSet.getString("job"), resultSet.getString("email"), base64Bitmap));
+                }
+                profileAdapter = new ProfileAdapter(MainActivity.this, profileList);
+                listViewDB.setAdapter(profileAdapter);
+
+                profileList_s = (ArrayList<Profile>) profileList.clone();
+
+                listViewDB.setOnItemClickListener((parent, view, position, id) -> {
+                    String nameText, jobText, emailText;
+                    TextView nameTv = view.findViewById(R.id.Name);
+                    nameText = nameTv.getText().toString();
+                    TextView jobTv = view.findViewById(R.id.Job);
+                    jobText = jobTv.getText().toString();
+                    TextView emailTv = view.findViewById(R.id.Email);
+                    emailText = emailTv.getText().toString();
+                    ImageView avatar = view.findViewById(R.id.list_itemAvatar);
+                    Bitmap avatarBm = ((BitmapDrawable) avatar.getDrawable()).getBitmap();
+                    setContentView(R.layout.edit_person);
+
+                    TextView editName = findViewById(R.id.editName);
+                    editName.setText(nameText);
+                    TextView editJob = findViewById(R.id.editJob);
+                    editJob.setText(jobText);
+                    TextView editEmail = findViewById(R.id.editEmail);
+                    editEmail.setText(emailText);
+                    ImageView ivAvatar = findViewById(R.id.ivAvatar);
+                    ivAvatar.setImageBitmap(avatarBm);
+                    findByName = nameText;
+                });
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
 
     public void Navigation(View v) {
         Button viewCreate = findViewById(R.id.btnViewCreate);

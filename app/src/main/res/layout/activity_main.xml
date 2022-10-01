@@ -14,6 +14,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/btnView"
         app:layout_constraintTop_toTopOf="parent"
+        tools:context=".MainActivity"
         tools:ignore="NotSibling">
 
         <Button
@@ -52,7 +53,36 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnViewCreate"
             app:layout_constraintStart_toEndOf="@+id/btnView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="48dp"
+            android:layout_height="45dp"
+            android:onClick="Search"
+            app:icon="@drawable/search_fill0_wght400_grad0_opsz48"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="30dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnViewCreate"
+            tools:ignore="MissingConstraints,SpeakableTextPresentCheck,UsingOnClickInXml" />
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:hint="@string/search"
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#717171"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/btnViewCreate"
+            app:layout_constraintStart_toEndOf="@+id/btnView"
+            tools:layout_editor_absoluteY="0dp"
+            tools:ignore="MissingConstraints"
+            android:autofillHints="" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
@@ -63,6 +93,7 @@
         android:focusable="true"
         android:minHeight="48dp"
         android:padding="20dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

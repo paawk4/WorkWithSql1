@@ -59,10 +59,10 @@
             android:inputType="textPersonName"
             android:textColor="#FFFFFFFF"
             android:textColorHint="#FFFFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="DuplicateClickableBoundsCheck,LabelFor,SpeakableTextPresentCheck" />
 
         <EditText
@@ -74,11 +74,11 @@
             android:inputType="text"
             android:textColor="#FFFFFFFF"
             android:textColorHint="#FFFFFFFF"
-            app:layout_constraintBottom_toTopOf="@+id/editName"
+            app:layout_constraintBottom_toTopOf="@+id/editEmail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editEmail"
+            app:layout_constraintTop_toBottomOf="@+id/editName"
             tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
         <EditText
@@ -90,9 +90,10 @@
             android:inputType="textEmailAddress"
             android:textColor="#FFFFFFFF"
             android:textColorHint="#FFFFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
