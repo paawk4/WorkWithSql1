@@ -10,7 +10,7 @@ public class BitmapCompress {
         int origWidth = b.getWidth();
         int origHeight = b.getHeight();
 
-        final int destWidth = 300;
+        final int destWidth = origWidth/2;
 
         ByteArrayOutputStream outStream = null;
         if (origWidth > destWidth) {
