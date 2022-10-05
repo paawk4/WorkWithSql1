@@ -15,10 +15,13 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +34,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final int MY_RESULT_CODE_FILECHOOSER = 2000;
     private static final String LOG_TAG = "Android Example";
     String findByName;
@@ -54,6 +60,22 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) View v = findViewById(com.google.android.material.R.id.ghost_view);
         ListOperations(v);
+        SpinnerInit();
+    }
+
+    public void SpinnerInit(){
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerSort);
+        spinner.setOnItemSelectedListener(this);
+
+        List<String> categories = new ArrayList<String>();
+        categories.add("By name a-z");
+        categories.add("By position a-z");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(dataAdapter);
     }
 
     public void DbOperations(View v) {
@@ -99,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 throwable.printStackTrace();
             }
             setContentView(R.layout.activity_main);
+            SpinnerInit();
             ListOperations(v);
         } else {
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -173,8 +196,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
-
     }
 
 
@@ -236,6 +257,31 @@ public class MainActivity extends AppCompatActivity {
         } else if (v.equals(goBack)) {
             setContentView(R.layout.activity_main);
             ListOperations(v);
+            SpinnerInit();
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        ListView listViewDB = findViewById(R.id.lvDatabase);
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+        if(item == "By name a-z"){
+            Collections.sort(profileList, new Comparator<Profile>() {
+                @Override
+                public int compare(Profile o1, Profile o2) {
+                    return o1.name.compareTo(o2.name);
+                }
+            });
+            profileAdapter = new ProfileAdapter(MainActivity.this, profileList);
+            listViewDB.setAdapter(profileAdapter);
+        }
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

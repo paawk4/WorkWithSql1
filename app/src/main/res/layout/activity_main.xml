@@ -66,7 +66,11 @@
             app:iconPadding="0dp"
             app:iconSize="30dp"
             app:layout_constraintEnd_toStartOf="@+id/btnViewCreate"
-            tools:ignore="MissingConstraints,SpeakableTextPresentCheck,UsingOnClickInXml" />
+            tools:ignore="MissingConstraints,SpeakableTextPresentCheck,UsingOnClickInXml">
+
+
+
+        </Button>
 
         <EditText
             android:id="@+id/searchBar"
@@ -84,16 +88,16 @@
             tools:ignore="MissingConstraints"
             android:autofillHints="" />
 
-        <Button
-            android:id="@+id/btnSort"
+        <Spinner
+            android:id="@+id/spinnerSort"
             android:layout_width="48dp"
             android:layout_height="45dp"
-            app:icon="@drawable/sort_fill0_wght400_grad0_opsz48"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconSize="30dp"
+            android:background="@drawable/spinner_bg"
+
+            app:layout_constrainedWidth="false"
             app:layout_constraintStart_toEndOf="@+id/btnView"
             tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
@@ -103,6 +107,7 @@
         android:background="#202020"
         android:clickable="true"
         android:focusable="true"
+        android:scrollbars="none"
         android:minHeight="48dp"
         android:padding="20dp"
         android:visibility="visible"

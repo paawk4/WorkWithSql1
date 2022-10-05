@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <size android:height="30dp" android:width="30dp"/>
+                    <solid/>
+
+                </shape>
+
+            </item>
+
+            <item
+                android:drawable="@drawable/sort_fill0_wght400_grad0_opsz48"
+                android:gravity="center">
+            </item>
+
+        </layer-list>
+
+    </item>
+</selector>
