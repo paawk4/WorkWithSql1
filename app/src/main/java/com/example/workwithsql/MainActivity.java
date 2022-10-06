@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -61,21 +64,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) View v = findViewById(com.google.android.material.R.id.ghost_view);
         ListOperations(v);
         SpinnerInit();
-    }
-
-    public void SpinnerInit(){
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerSort);
-        spinner.setOnItemSelectedListener(this);
-
-        List<String> categories = new ArrayList<String>();
-        categories.add("By name a-z");
-        categories.add("By position a-z");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(dataAdapter);
     }
 
     public void DbOperations(View v) {
@@ -260,22 +248,51 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             SpinnerInit();
         }
     }
+    public void SpinnerInit(){
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerSort);
+        spinner.setOnItemSelectedListener(this);
 
+        List<String> categories = new ArrayList<String>();
+        categories.add("By name a-z");
+        categories.add("By position a-z");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(dataAdapter);
+        spinner.setBackgroundResource(R.drawable.spinner_bg);
+    }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         ListView listViewDB = findViewById(R.id.lvDatabase);
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();
-        if(item == "By name a-z"){
+        if(item == "By name a-z")
+        {
             Collections.sort(profileList, new Comparator<Profile>() {
                 @Override
                 public int compare(Profile o1, Profile o2) {
-                    return o1.name.compareTo(o2.name);
+                    return o1.name.toLowerCase(Locale.ROOT).compareTo(o2.name.toLowerCase(Locale.ROOT));
                 }
             });
             profileAdapter = new ProfileAdapter(MainActivity.this, profileList);
             listViewDB.setAdapter(profileAdapter);
         }
+        else if(item == "By position a-z")
+        {
+            Collections.sort(profileList, new Comparator<Profile>() {
+                @Override
+                public int compare(Profile o1, Profile o2) {
+                    return o1.job.toLowerCase(Locale.ROOT).compareTo(o2.job.toLowerCase(Locale.ROOT));
+                }
+            });
+            profileAdapter = new ProfileAdapter(MainActivity.this, profileList);
+            listViewDB.setAdapter(profileAdapter);
+        }
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerSort);
+
+        spinner.setBackgroundResource(R.drawable.spinner_bg);
         // Showing selected spinner item
         Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
     }
