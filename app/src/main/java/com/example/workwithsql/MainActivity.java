@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             spinner.setAdapter(dataAdapter);
+
         }
         catch (Exception ignored){
         }

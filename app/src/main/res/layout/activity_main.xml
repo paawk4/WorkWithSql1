@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +13,7 @@
         android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btnView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".MainActivity"
         tools:ignore="NotSibling">
@@ -30,19 +31,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="MissingConstraints,SpeakableTextPresentCheck,UsingOnClickInXml" />
 
-        <Button
-            android:id="@+id/btnView"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:contentDescription="@string/view"
-            android:onClick="ListOperations"
-            app:icon="@drawable/ic_refresh_fill0_wght400_grad0_opsz48"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconSize="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints,UsingOnClickInXml" />
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
@@ -51,8 +39,8 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnViewCreate"
-            app:layout_constraintStart_toEndOf="@+id/btnView"
+            app:layout_constraintEnd_toEndOf="@+id/searchBar"
+            app:layout_constraintStart_toStartOf="@+id/searchBar"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
 
@@ -69,33 +57,35 @@
             tools:ignore="MissingConstraints,SpeakableTextPresentCheck,UsingOnClickInXml">
 
 
-
         </Button>
 
         <EditText
             android:id="@+id/searchBar"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/search"
             android:inputType="textPersonName"
             android:textColor="#FFFFFF"
             android:textColorHint="#717171"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/btnViewCreate"
-            app:layout_constraintStart_toEndOf="@+id/btnView"
-            tools:layout_editor_absoluteY="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints"
-            android:autofillHints="" />
+            tools:layout_editor_absoluteY="0dp" />
 
         <Spinner
             android:id="@+id/spinnerSort"
-            android:layout_width="48dp"
+            style="@android:style/Widget.Material.Spinner"
+            android:layout_width="93dp"
             android:layout_height="45dp"
-            android:background="@drawable/spinner_bg"
 
+            android:background="@drawable/spinner_bg"
+            android:keepScreenOn="false"
             app:layout_constrainedWidth="false"
-            app:layout_constraintStart_toEndOf="@+id/btnView"
+            app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -107,14 +97,16 @@
         android:background="#202020"
         android:clickable="true"
         android:focusable="true"
-        android:scrollbars="none"
         android:minHeight="48dp"
         android:padding="20dp"
+        android:scrollbars="none"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Header"
         tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
